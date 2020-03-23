@@ -12,14 +12,14 @@
             }).done(function (data) {
                 if (data.success === true)
                 {
-                    window.location.href = '/login.php';
+                    window.location.href = '../login.php';
                 }
                 else
                 {
                     $('#message').html(data.message).fadeIn();
                 }
             }).fail(function () {
-                $('body').html('Une erreur est arrivée, veuillez réessayer');
+                $('body').html('Une erreur réseau est arrivée, veuillez réessayer');
             });
             return false;
         })

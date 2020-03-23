@@ -13,14 +13,16 @@
 
 </head>
 <body>
+<header>
 
+</header>
 
 
 <h2>Boisson à composer</h2>
 
 
 
-<form action="userpage.php" method="post" id="form-login">
+<form action="login.php" method="post" id="form-login">
 <fieldset id="message">
         <div class="form-group row">
             <input type="text" value="id">
@@ -33,17 +35,11 @@
     <button type="submit">Envoyer</button>
     </fieldset>
 </form>
+<div if="message" style="display: none">Erreur de connexion</div>
 
-<label for="staticEmail" class="col-sm-2 col-form-label">Email</label>
-<div class="col-sm-10">
-    <input type="text" class="form-control-plaintext" id="staticEmail" value="email@example.com">
-</div>
 
-<p>Nullam quis risus eget <a href="#">urna mollis ornare</a> vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.</p>
-<p><small>This line of text is meant to be treated as fine print.</small></p>
-<p>The following is <strong>rendered as bold text</strong>.</p>
-<p>The following is <em>rendered as italicized text</em>.</p>
-<p>An abbreviation of the word attribute is <abbr title="attribute">attr</abbr>.</p>
+
+
 
 </body>
 </html>

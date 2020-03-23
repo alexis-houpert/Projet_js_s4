@@ -3,7 +3,7 @@ session_start();
 
 //$obj = new stdClass;
 //$obj->success = false;
-//$obj->message = 'Erreur, le username ou le mdp il faut se debrouiller dans la vie';
+//$obj->message = 'Erreur, le username ou le mdp il faut se débrouiller dans la vie';
 
 
 try
@@ -52,7 +52,7 @@ if (isset($_POST['submit']))
 }
 else
 {
-    echo'';
+    echo'Erreur : ';
 }
 
 
@@ -60,4 +60,4 @@ header('Cache-Control: no-cache, must-revalidate');
 header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
 header('Content-type: application/json');
 
-//echo json_encode($obj);
+echo json_encode($obj);

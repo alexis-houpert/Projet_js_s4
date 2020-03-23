@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<?php echo '<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -11,9 +11,10 @@
 </head>
 <body>
 <header>
-
+    
 </header>
 <input type="checkbox" name="case" id="case" /> <label for="case">Ma case à cocher</label>
 
 </body>
-</html>
+</html>';
+?>
