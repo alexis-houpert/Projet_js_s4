@@ -21,23 +21,21 @@
 <h2>Boisson à composer</h2>
 
 
-
 <form action="login.php" method="post" id="form-login">
-<fieldset id="message">
-        <div class="form-group row">
-            <input type="text" value="id">
-        </div>
+    <fieldset id="message">
+
+        <input id="mail-id" type="text" name="id" value="id" placeholder="id">
+
 
         <div class="form-group">
             <label for="exampleInputPassword1">Password</label>
-            <input name="mdp" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+            <input id="mail-mdp" name="mdp" type="password" class="form-control" id="exampleInputPassword1"
+                   placeholder="Password">
         </div>
-    <button type="submit">Envoyer</button>
+        <button id="mail-submit" type="submit">Envoyer</button>
     </fieldset>
 </form>
-<div if="message" style="display: none">Erreur de connexion</div>
-
-
+<div id="message"></div>
 
 
 
