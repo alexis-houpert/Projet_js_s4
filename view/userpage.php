@@ -4,7 +4,7 @@ if(isset($_POST['logout']))
 {
     unset($_SESSION['email']);
 }
-?>
+echo '
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,8 +13,9 @@ if(isset($_POST['logout']))
     <link rel="stylesheet" href="../css/bootstrap.min.css">
 
     <title>Title</title>
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="../script/cocktail-handler.js"></script>
+    
 </head>
 <body>
 <header>
@@ -29,6 +30,10 @@ if(isset($_POST['logout']))
                 <li class="nav-item active">
                     <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                 </li>
+                
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Deconnexion <span class="sr-only">(current)</span></a>
+                </li>
             </ul>
             <form class="form-inline my-2 my-lg-0">
                 <input class="form-control mr-sm-2" type="text" placeholder="Search">
@@ -37,7 +42,22 @@ if(isset($_POST['logout']))
         </div>
     </nav>
 </header>
-<input type="checkbox" name="case" id="case" /> <label for="case">Ma case à cocher</label>
+<h1>Composez votre cocktail</h1> <br>
+<section id="selection" style="display: flex; flex-wrap: wrap; ">
+    <input type="checkbox" class="case" name="filter1" id="case" style="margin-left: 10px;" /> <label name="Gin" for="case" style="margin: 10px;">Gin</label> <br>
+    <input type="checkbox" class="case" name="filter2" id="case" /> <label name="White rum" for="case" style="margin: 10px;">White rum</label> <br>
+    <input type="checkbox" class="case" name="filter3" id="case" /> <label name="Cognac" for="case" style="margin: 10px;">Cognac</label> <br>
+    <input type="checkbox" class="case" name="filter4" id="case" /> <label name="Kirsh" for="case" style="margin: 10px;">Kirsh</label> <br>
+    <input type="checkbox" class="case" name="filter4" id="case" /> <label name="Vodka" for="case" style="margin: 10px;">Vodka</label> <br>
+    <input type="checkbox" class="case" name="filter4" id="case" /> <label name="Tequila" for="case" style="margin: 10px;">Tequila</label> <br>
+    
+    <form id="search_form" name="button" class="form-inline my-2 my-lg-0">
+                <button id="search_box" class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+            </form>
+</section>
+<section id="list_cocktail" style="display:flex; flex-wrap: wrap; padding: 10px;">
 
+</section>
 </body>
 </html>';
+?>
