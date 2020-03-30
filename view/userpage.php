@@ -1,20 +1,32 @@
 <?php
 session_start();
-if(isset($_POST['logout']))
+
+try
 {
-    unset($_SESSION['email']);
+    $bdd = new PDO('mysql:host=mysql-alderise.alwaysdata.net;dbname=alderise_cocktail', 'alderise', 'Alexh342000');
 }
-echo '
+catch (Exception $e){
+    die('Erreur lors de la connexion à la BD : ' . $e->getMessage());
+
+}
+
+if (isset($_GET['id']))
+{
+
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
 
     <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/style.css">
 
     <title>Title</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script src="../script/cocktail-handler.js"></script>
+    <script src="../script/style-manager.js"></script>    
     
 </head>
 <body>
@@ -28,12 +40,17 @@ echo '
         <div class="collapse navbar-collapse" id="navbarColor01">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="../index.php">Home <span class="sr-only">(current)</span></a>
                 </li>
                 
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Deconnexion <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="../json/logout.php">Deconnexion <span class="sr-only">(current)</span></a>
                 </li>
+
+                <li class="nav-item active">
+                    <a class="nav-link" href="#"><?php echo $_GET['id']?> <span class="sr-only">(current)</span></a>
+                </li>
+
             </ul>
             <form class="form-inline my-2 my-lg-0">
                 <input class="form-control mr-sm-2" type="text" placeholder="Search">
@@ -59,5 +76,6 @@ echo '
 
 </section>
 </body>
-</html>';
+</html>;
+<?php
 ?>

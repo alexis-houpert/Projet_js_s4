@@ -1,9 +1,9 @@
 (function() {
     'use strict';
-    $(() => {
-        $('#mail-submit').submit(function (e)
+    $(document).ready(function () {
+        $('form').submit(function (e)
         {
-            e.preventDefault();
+            e.preventDefault(e);
 
             let id = $("#mail-id").val();
             let mdp = $("#mail-mdp").val();
@@ -13,10 +13,11 @@
                 url: $(this).attr('action'),
                 type: $(this).attr('methode'),
                 data: {
-                    id : id,
-                    mdp : mdp
-                }),
+                    'id' : id,
+                    'mdp' : mdp
+                },
                 dataType: 'json'
+
             }).done(function (data) {
                 if (data.success === true)
                 {
