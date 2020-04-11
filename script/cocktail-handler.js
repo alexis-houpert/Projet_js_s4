@@ -7,99 +7,50 @@
         load_Content();
         });
 
-    $(document).ready(function () {
-        $('#search_form').on('click',function () {
-            console.log('Clique sur searchBox')
-            let nbFilter = 0;
 
-            // On compte le nombre de cases
-            let cases = $('#selection.case');
-            cases.each(function () {
-                nbFilter =  nbFilter + 1;
-            })
-
-
-            let filterArray = []; //array de string pour les ingrédients du cocktail
-            filterArray.length = nbFilter;
-
-            console.log($('#selection.label:first').name());
-
-            for (i in nbFilter - 1)
-            {
-
-                if (cases.eq(i).checked)
-                    filterArray[i] = $('#selection.label').eq(i).val;
-
-            }
-            let list_cocktail = search_Cocktail(filterArray);
-            load_searchBox(list_cocktail);
-        })
-    });
-
-    $(".card-title").hide();
-    $('.text-primary').hide();
-    $('.card-text').hide();
-    $('.card-body').hover(function () {
-        $('.card-text').show(500);
-        $('.text-primary').show(500);
-        $('.card-title').show(500);
-    })//hover
 }) ();
-
-function search_Cocktail(filterArray) {
-    let list_cocktail = [];
-    $.get("../json/cocktail.json", function (content) {
-        console.log("get JSON");
-    }).done(function (content) {
-        for (let i in content) {
-            for (y in content[i]['ingredients']){
-                for (z in filterArray) {
-                    if (content[i][ingredients][y]['ingredient'] == filterArray[z])
-                        list_cocktail.push(content[i]['name']);
-                }
-            }
-        }
-    });
-    console.log('Nombre de cocktail correspondant aux filtres: '+ list_cocktail.length);
-    return list_cocktail;
-}
-
-function load_searchBox(nameList_Cocktail) {
-    $.get("../json/cocktail.json", function (content) {
-        console.log("get JSON");
-    }).done(function (content) {
-        let sortContent = [];
-        for (i in content)
-        {
-            if(content[i]['name'] == nameList_Cocktail[i])
-                sortContent.push(content[i]);
-        }
-        console.log('l\'appel de display doit être modifié');
-        //display(sortContent)
-    });
-}
 
 
 function load_Content () {
     $.get("../json/cocktail.json", function (content) {
         console.log("get JSON");
     }).done(function (content) {
-        console.log('get cocktail.json')
-        load_Content2(content);
+
+
+        $.get("../json/cocktail-img.json", function (content2) {
+        }).done(function (content2) {
+
+            for (let i in content)
+            {
+                for (let y in content2)
+                {
+                    if (content2[y]['name'] == content[i]['name'])
+                    {
+                        content[i]['image'] = content2[y]['image'];
+                    }
+                }
+
+            }
+
+            let cache = JSON.stringify(content)
+            let cache2 = JSON.stringify(content2)
+
+            localStorage.setItem('cocktail',cache);
+            localStorage.setItem('cocktailImg',cache2);
+            localStorage.setItem('filterCocktail', cache);
+
+            display();
+        })
     });
 
 }
 
-function load_Content2(content) {
-    $.get("../json/cocktail-img.json", function (content2) {
-    }).done(function (content2) {
-        console.log('Get cocktail-img.json');
-        display(content,content2);
-    })
-}
 
-function display(content,content2) {
+
+function display() {
     $('#list_cocktail').empty();
+    content = JSON.parse(localStorage.getItem('filterCocktail'));
+    content2 = JSON.parse(localStorage.getItem('cocktailImg'));
     for (let i in content)
     {
         if (content[i]['category'] != undefined)
@@ -108,27 +59,69 @@ function display(content,content2) {
         if (content[i]['category'] == undefined)
             content[i]['category'] = '';
 
-
-
-        for (y in content2)
+       /* for (y in content2)
         {
 
-                     if (content2[y]['name'] == content[i]['name'])
-                     {
+            if (content2[y]['name'] == content[i]['name'])
+            {
 
-                         var linkImgJson = content2[y]['image'];
-                     }
+                var linkImgJson = content2[y]['image'];
+            }
 
-        }
+        } */
 
-        $('#list_cocktail').append('<div class="card border-primary mb-3 box-cocktail" wfd-id="72">\n' +
-            '                <div class="card-header" style="color: #fd7e14" wfd-id="74">'+ content[i]['name'] + '</div>\n' +
-            '            <div class="card-body"  style="//background-image: url(' + linkImgJson + ');" wfd-id="73">\n' +
-            '            <h4 class="card-title">' + content[i]['glass'] + content[i]['category'] + '</h4>\n' +
-            '        <p class="card-text">' + content[i]['ingredients'][0]['ingredient'] + '</p>' +
-            '        <p class="text-primary">' + content[i]['preparation'] + '</p>' +
+
+
+        $('#list_cocktail').append('<div class="card border-primary mb-3" style="max-width: 20rem; margin-left: 10px" wfd-id="72">\n' +
+            '                <div class="card-header" style="color: #fd7e14" wfd-id="74">'+ content[i]['glass'] + '</div>\n' +
+            '            <div class="card-body" wfd-id="73">\n' +
+            '            <h4 class="card-title">' + content[i]['name'] + '</h4>\n' +
+            '        <p class="card-text">' + content[i]['category'] + '</p>' +
+            '        <p class="text-primary">Ingrédients : ' + ingredientsToString(i) + ' </p>' +
             '        </div>\n' +
-            '        </div>');
+            '        </div>')
+            .on('click', function () {
+                $('#desc_cocktail').fadeOut(500, function () {
+
+                    $(this).empty().html('<div class="card mb-3">\n' +
+                        '  <h3 class="card-header">Card header</h3>\n' +
+                        '  <div class="card-body">\n' +
+                        '    <h5 class="card-title">Special title treatment</h5>\n' +
+                        '    <h6 class="card-subtitle text-muted">Support card subtitle</h6>\n' +
+                        '  </div>\n' +
+                        '  <img style="height: 200px; width: 100%; display: block;" src=' + content[i]['image'] + ' alt="Card image">\n' +
+                        '  <div class="card-body">\n' +
+                        '    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card\'s content.</p>\n' +
+                        '  </div>\n' +
+                        '  <ul class="list-group list-group-flush">\n' +
+                        '    <li class="list-group-item">Cras justo odio</li>\n' +
+                        '    <li class="list-group-item">Dapibus ac facilisis in</li>\n' +
+                        '    <li class="list-group-item">Vestibulum at eros</li>\n' +
+                        '  </ul>\n' +
+                        '  <div class="card-body">\n' +
+                        '    <a href="#" class="card-link">Card link</a>\n' +
+                        '    <a href="#" class="card-link">Another link</a>\n' +
+                        '  </div>\n' +
+                        '</div>\n')
+                        .fadeIn(500,function () {
+
+                    })
+                })
+
+            })
     }
     console.log('Contenu chargé !');
+}
+
+function ingredientsToString(i) {
+    let content = localStorage.getItem('filterCocktail');
+    let string = '';
+        for (let z in content[i]['ingredients'])
+        {
+            if (!z == 0)
+                string.concat(' - ');
+            string.concat(content[i]['ingredients'][z]['ingredient']);
+            console.log(content[i]['ingredients'][z]['ingredient']);
+        }
+    return string;
 }

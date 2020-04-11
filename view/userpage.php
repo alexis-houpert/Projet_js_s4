@@ -10,10 +10,11 @@ catch (Exception $e){
 
 }
 
-if (isset($_GET['id']))
+if (!isset($_SESSION['pseudo']) | empty($_SESSION['pseudo']))
 {
-
+    header("Location: ../.");
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -26,7 +27,7 @@ if (isset($_GET['id']))
     <title>Title</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script src="../script/cocktail-handler.js"></script>
-    <script src="../script/style-manager.js"></script>    
+    <script src="../script/cocktail-filter.js"></script>
     
 </head>
 <body>
@@ -48,7 +49,7 @@ if (isset($_GET['id']))
                 </li>
 
                 <li class="nav-item active">
-                    <a class="nav-link" href="#"><?php echo $_GET['id']?> <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="#"><?php echo $_SESSION['pseudo']?> <span class="sr-only">(current)</span></a>
                 </li>
 
             </ul>
@@ -61,20 +62,27 @@ if (isset($_GET['id']))
 </header>
 <h1>Composez votre cocktail</h1> <br>
 <section id="selection" style="display: flex; flex-wrap: wrap; ">
-    <input type="checkbox" class="case" name="filter1" id="case" style="margin-left: 10px;" /> <label name="Gin" for="case" style="margin: 10px;">Gin</label> <br>
-    <input type="checkbox" class="case" name="filter2" id="case" /> <label name="White rum" for="case" style="margin: 10px;">White rum</label> <br>
-    <input type="checkbox" class="case" name="filter3" id="case" /> <label name="Cognac" for="case" style="margin: 10px;">Cognac</label> <br>
-    <input type="checkbox" class="case" name="filter4" id="case" /> <label name="Kirsh" for="case" style="margin: 10px;">Kirsh</label> <br>
-    <input type="checkbox" class="case" name="filter4" id="case" /> <label name="Vodka" for="case" style="margin: 10px;">Vodka</label> <br>
-    <input type="checkbox" class="case" name="filter4" id="case" /> <label name="Tequila" for="case" style="margin: 10px;">Tequila</label> <br>
+    <input type="checkbox" class="case" name="Gin" id="case" style="margin-left: 10px;" /> <label name="Gin" for="case" style="margin: 10px;">Gin</label> <br>
+    <input type="checkbox" class="case" name="White rum" id="case" /> <label name="White rum" for="case" style="margin: 10px;">White rum</label> <br>
+    <input type="checkbox" class="case" name="Cognac" id="case" /> <label name="Cognac" for="case" style="margin: 10px;">Cognac</label> <br>
+    <input type="checkbox" class="case" name="Kirsh" id="case" /> <label name="Kirsh" for="case" style="margin: 10px;">Kirsh</label> <br>
+    <input type="checkbox" class="case" name="Vodka" id="case" /> <label name="Vodka" for="case" style="margin: 10px;">Vodka</label> <br>
+    <input type="checkbox" class="case" name="Tequila" id="case" /> <label name="Tequila" for="case" style="margin: 10px;">Tequila</label> <br>
     
-    <form id="search_form" name="button" class="form-inline my-2 my-lg-0">
-                <button id="search_box" class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-            </form>
+    <div id="search_form" class="form-inline my-2 my-lg-0">
+                <div id="search_box" class="btn btn-secondary my-2 my-sm-0">Search</div>
+            </div>
 </section>
-<section id="list_cocktail" style="display:flex; flex-wrap: wrap; padding: 10px;">
+
+<section id="content" style="display: flex; ">
+
+<section id="list_cocktail" class="listCocktail">
+</section>
+
+<section id="desc_cocktail" class="desc-Cocktail"></section>
 
 </section>
+
 </body>
 </html>;
 <?php

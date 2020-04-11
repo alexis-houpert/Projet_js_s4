@@ -1,12 +1,6 @@
 <?php
 session_start();
 
-
-$obj = new stdClass;
-$obj->success = false;
-$obj->message = 'Erreur, pas de correspondance  id mdp. Il faut se débrouiller dans la vie';
-
-
 try
 {
     $bdd = new PDO('mysql:host=mysql-alderise.alwaysdata.net;dbname=alderise_cocktail', 'alderise', 'Alexh342000');
@@ -14,58 +8,70 @@ try
 catch (Exception $e){
     die('Erreur lors de la connexion à la BD : ' . $e->getMessage());
 
-
 }
 
-    if( !isset($_POST['id']) && !isset($_POST['mdp']) ){
-        echo "<span class='invalid-feedback'>Les variables id et mdp ne sont pas définis!</span>";
-    }
-        $id = htmlspecialchars($_POST['id']);
-        $mdp = htmlspecialchars($_POST['mdp']);
+$obj = new stdClass;
+$obj->success = false;
+$obj->message = '';
+$obj->pseudo = '';
 
-        $errorEmpty = false;
-        $errorId = false;
+if (isset($_POST['submitconnect']))
+{
+    $mailconnect = htmlspecialchars($_POST['mailconnect']);
+    $mdp = $_POST['mdpconnect'];
 
-        if (empty($id) || empty($mdp)) {
-            echo "<span class='invalid-feedback'>Remplissez toutes les cases !</span>"; //déplacer ce code dans le js
-            $errorEmpty = true;
-        } elseif (filter_var($id, FILTER_VALIDATE_EMAIL)) {
-            echo "<span class='invalid-feedback'>Entrez un mail valide !</span>"; //depalcer ce
-            $errorId = true;
-        } /*else {
-            echo "<span class='valid-feedback'>Formulaire valide !</span>";
-        }*/
+    $mdpconnect = sha1($mdp);
 
-        //VERIF BD
-
-    $cryptmdp = sha1($mdp);
-    //echo $cryptmdp;
-
-    $req = $bdd->prepare('SELECT id, mdp FROM user WHERE user.id = :id AND user.mdp = :mdp');
-    $req->bindParam(':id', $id);
-    $req->bindParam(':mdp', $cryptmdp);
-    $req->execute();
-
-
-    $donnees = $req->fetch();
-
-    if (true)
+    if (!empty($mailconnect) AND !empty($mdpconnect)) //dupliquer les vérification dans le js
     {
-        session_start();
-        $_SESSION[$id] = 123;
-        $obj -> success = true;
+        $req = $bdd->prepare('SELECT * FROM user WHERE mail = ? AND motdepasse = ?');
+        $req->execute(array($mailconnect, $mdpconnect));
+
+
+
+        $userexist = $req->rowCount();
+
+        $result = $req->fetch();
+
+
+        if ($userexist > 0)
+        {
+            $_SESSION['id'] = $result['id'];
+            $_SESSION['pseudo'] = $result['pseudo'];
+
+            $obj-> success = true;
+            $obj-> message = 'Connexion réussie';
+            $obj->pseudo = $result['pseudo'];
+            echo json_encode($obj);
+            //header('Location: /view/userpage.php?id=' . $result['pseudo']);
+            exit();
+        }
+        else
+        {
+            $obj-> success = false;
+            $obj-> message = 'Le mail et le mot de passe sont incorrects    ';
+            echo json_encode($obj);
+            exit();
+        }
     }
     else
     {
-        echo "<span class='invalid-feedback'>Pas de correspondance pour l'id et/ou le mot de passe. PHP side</span>";
+        $obj-> success = false;
+        $obj-> message = 'Tous les champs doivent être complétés';
+        echo json_encode($obj);
+        //$erreur= "Tous les champs doivent être complétés";
+        exit();
     }
-
-
-
+}
+else
+{
+    $obj-> success = false;
+    $obj-> message = 'Le formulaire est corrompu !';
+    exit();
+}
 
 header('Cache-Control: no-cache, must-revalidate');
 header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
 header('Content-type: application/json');
 
-json_encode($obj);
-
+echo json_encode($obj);

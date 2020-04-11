@@ -26,7 +26,7 @@ session_destroy();
 $obj = new stdClass();
 $obj-> success = isset($_SESSION['user']);
 
-header("Location: index.php");
+header("Location: ../.");
 
 /*header('Cache-Control: no-cache, must-revalidate');
 header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');

@@ -3,7 +3,7 @@ session_start();
 
 $obj = new stdClass;
 $obj->success = false;
-$obj->message = 'Erreur, le username ou le mdp il faut se debrouiller dans la vie';
+$obj->message = 'Erreur !';
 
 
 try
@@ -16,17 +16,22 @@ catch (Exception $e){
 
 }
 
-if (isset($_POST['submit']))
+if (!isset($_SESSION['pseudo']) | empty($_SESSION['pseudo']))
 {
-    if (!empty($_POST['id']) && !empty($_POST['mdp']))
+    header("Location: /index.php");
+}
+
+if (isset($_POST['submitconnect']))
+{
+    if (!empty($_POST['mailconnect']) && !empty($_POST['mdpconnect']))
     {
-        $id = htmlspecialchars($_POST['id']);
-        $mdp = htmlspecialchars($_POST['mdp']);
+        $id = htmlspecialchars($_POST['mailconnect']);
+        $mdp = htmlspecialchars($_POST['mdpconnect']);
 
         $cryptmdp = sha1($mdp);
 
 
-        $req = $bdd->prepare('SELECT id, mdp FROM user WHERE user.id = ? AND user.mdp = ?');
+        $req = $bdd->prepare('SELECT mail, motdepasse FROM user WHERE mail = ? AND motdepasse = ?');
         $req->execute($id, $cryptmdp);
 
 
@@ -37,23 +42,26 @@ if (isset($_POST['submit']))
         $found = isset($donnees['id'] ) && isset($donnees['mdp']);
         if ($found)
         {
-            //$obj -> success = true;
+            $obj -> success = true;
+            $obj-> message = 'Success';
             $_SESSION[$id] = $id;
-            header("Location:");
+            //header("Location:");
         }
         else
         {
+            $obj->message = 'Pas de correspondance id / mdp';
             echo "Pas de correspondance pour l'id et/ou le mot de passe";
         }
     }
     else
     {
+        $obj->message = 'Les champs envoyés sont vides';
         echo'Les champs envoyés sont vides';
     }
 }
 else
 {
-    echo'';
+    $obj->message = 'Erreur sur submit';
 }
 
 

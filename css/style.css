@@ -1,20 +1,23 @@
-.box-cocktail
+
+
+.listCocktail
 {
-    max-width: 20rem; margin-left: 10px;
+    display:flex; flex-wrap: wrap;
+    width: 75%;
+
+    overflow: auto;
+    height: 85vh;
 }
 
-.card-title-content
+.desc-Cocktail
 {
+    width: 25%;
+    margin-right: 2rem;
+    height: 85vh;
 
 }
 
 
-.card-text-content
-{
-
-}
-
-.card-primary-content
-{
-
+body, html {
+    height: 100%;
 }

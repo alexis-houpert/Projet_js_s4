@@ -16,11 +16,10 @@ if (isset($_POST['submit']))
     $mdp1 = $_POST['mdp1'];
     $mdp2 = $_POST['mdp2'];
 
-    $cryptmdp1 = password_hash($mdp1, PASSWORD_DEFAULT);
+    $cryptmdp1 = sha1($mdp1);
 
-    if (!empty($_POST['pseudo']) AND !empty($_POST['mail']) AND !empty($_POST['mdp']) AND !empty($_POST['mdp2']))
+    if (!empty($_POST['pseudo']) AND !empty($_POST['mail1']) AND !empty($_POST['mail2']) AND !empty($_POST['mdp1']) AND !empty($_POST['mdp2']))
     {
-
 
         $pseudolenght = strlen($pseudo);
         if ($pseudolenght <= 30)

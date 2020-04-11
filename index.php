@@ -1,45 +1,4 @@
-<?php
-session_start();
 
-try
-{
-    $bdd = new PDO('mysql:host=mysql-alderise.alwaysdata.net;dbname=alderise_cocktail', 'alderise', 'Alexh342000');
-}
-catch (Exception $e){
-    die('Erreur lors de la connexion à la BD : ' . $e->getMessage());
-
-}
-
-if (isset($_POST['submitconnect']))
-{
-    $mailconnect = htmlspecialchars($_POST['idconnect']);
-    $mdpconnect = sha1($_POST['mdpconnect']);
-
-    if (!empty($mailconnect) AND !empty($mdpconnect)) //dupliquer les vérification dans le js
-    {
-        $req = $bdd->prepare('SELECT * FROM user WHERE id = ? AND mdp = ?');
-        $req->execute(array($mailconnect, $mdpconnect));
-        $userexist = $req->rowCount();
-
-        if ($userexist == 1)
-        {
-            $userinfo = $req->fetch();
-            $_SESSION['num'] = $userinfo['num'];
-            $_SESSION['id'] = $userinfo['id'];
-            header("Location: view/userpage.php?id=".$_SESSION['id']);
-            exit();
-        }
-        else
-        {
-            $erreur = "Mauvais mail ou mot de passe";
-        }
-    }
-    else
-    {
-        $erreur= "Tous les champs doivent être complétés";
-    }
-}
-?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -48,9 +7,9 @@ if (isset($_POST['submitconnect']))
 
     <link rel="stylesheet" href="../css/bootstrap.min.css">
 
-    <script src="script/login.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="/script/login.js"></script>
 
 </head>
 <body>
@@ -77,28 +36,42 @@ if (isset($_POST['submitconnect']))
 
 <h2>Boisson à composer</h2>
 
+<div class="alert alert-dismissible alert-warning">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <h4 class="alert-heading">Warning!</h4>
+    <p class="mb-0">Vous n'êtes pas connecté ! Pour accéder aux fonctionnalités du site veuillez vous connecter</p>
+</div>
+
+
+
 
 <legend style="width: 20%; margin-left: auto; margin-right: 5%;">Connexion</legend>
 
-<form action="index.php" method="post" wfd-id="337" style="width: 20%; margin-left: auto; margin-right: 5%;">
+
+<form id="formconnect" name="formconnect" action="login.php" method="post" wfd-id="337" style="width: 20%; margin-left: auto; margin-right: 5%;">
     <fieldset>
 <div class="form-group" wfd-id="361">
     <label for="exampleInputEmail1" wfd-id="362">Email address</label>
-    <input name="mailconnect" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" wfd-id="510">
+    <input name="mailconnect" type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" wfd-id="510">
     <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
 </div>
 <div class="form-group" wfd-id="359">
     <label for="exampleInputPassword1" wfd-id="360">Password</label>
-    <input name="mdpconnect" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" wfd-id="509">
+    <input name="mdpconnect" type="password" class="form-control" id="password" placeholder="Password" wfd-id="509">
 </div>
     </fieldset>
-    <button name="submit" type="submit" class="btn btn-primary" wfd-id="575">Submit</button>
+    <button id="submitconnect" name="submitconnect" type="submit" class="btn btn-primary" wfd-id="575">Submit</button>
 </form>
 
-<div id="message"></div>
+
+
+<div style="display: none" id="message" class="alert alert-dismissible alert-success">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <div id="text_message"><strong>Well done!</strong> Connection successful </div>
+</div>
 <?php
 if (isset($erreur))
-    echo '<label color="red">'.$erreur.'</label>';
+    echo '<label id="phpMessage" color="red">'.$erreur.'</label>';
 ?>
 
 
