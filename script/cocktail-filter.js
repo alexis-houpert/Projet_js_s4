@@ -2,6 +2,7 @@
     'use strict';
     $(document).ready(function () {
 
+
         $('.case').prop('checked', false);
 
         $('#search_form').on('click',function () {
@@ -18,17 +19,22 @@
 
             if (!tab.length > 0) {
                 // the array is defined and has at least one element
-                localStorage.setItem('filterCocktail', '[{}]');
+                localStorage.setItem('filterCocktail', JSON.stringify(content));
             }
             else {
                 let jsonfiltered = [];
                 for (let i in content) {
+                    let cpt = 0;
                     for (let y in content[i]['ingredients']) {
                         for (let z in tab) {
                             if (tab[z] == content[i]['ingredients'][y]['ingredient'])
-                                jsonfiltered.push(content[i]);
+                            {
+                                cpt ++
+                            }
                         }
                     }
+                    if (tab.length - 1 == cpt)
+                        jsonfiltered.push(content[i]);
                 }
                 localStorage.setItem('filterCocktail', JSON.stringify(jsonfiltered));
             }
@@ -37,3 +43,4 @@
 
     })
     }) ();
+
